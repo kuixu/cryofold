@@ -17,7 +17,7 @@ Protein complex structure determination by structure prediction with cryo-EM den
 </p>
 
 ## Web Server
-### https://cryonet/cryofold
+### https://cryonet.ai/cryofold
 
 ## Introduction
 
@@ -34,7 +34,7 @@ Cryo-electron microscopy (cryo-EM) has become a prominent approach for protein s
 
 ## Installation
 
-The machine should be Linux, full installation requires up to 4 TB of disk space to keep sequence and structure databases and any GPU supports CUDA with at least 40GB memory. (Currently, the scripts for setting up and preprocess all of these databases are still in preparing. Please use the [Webserver](https://cryonet/cryofold) to run CryoFold.)
+The machine should be Linux, full installation requires up to 4 TB of disk space to keep sequence and structure databases and any GPU supports CUDA with at least 40GB memory. (Currently, the scripts for setting up and preprocess all of these databases are still in preparing. Please use the [Webserver](https://cryonet.ai/cryofold) to run CryoFold.)
 
 
 ### 1. Clone the repository in your computer 
@@ -68,7 +68,7 @@ python setup.py install
 ### 4. Download the sequence and structure databases
 
 CryoFold needs multiple sequence ([PDB seqres](https://www.rcsb.org/), [UniProt](https://www.uniprot.org/uniprot/), [UniRef90](https://www.uniprot.org/help/uniref), [UniClust30](https://uniclust.mmseqs.com/), [MGnify](https://www.ebi.ac.uk/metagenomics/), [BFD](https://bfd.mmseqs.com/), [MetaEuk](https://mmseqs.com/metaeuk), 
-[SMAG](https://smag.microbmalab.cn), and [PDB70](http://wwwuser.gwdg.de/~compbiol/data/hhsuite/databases/hhsuite_dbs/)) and structure ([PDB](https://www.rcsb.org/))databases to run. (Currently, the scripts for setting up and preprocess all of these databases are still in preparing. Please use the [Webserver](https://cryonet/cryofold) to run CryoFold.)
+[SMAG](https://smag.microbmalab.cn), and [PDB70](http://wwwuser.gwdg.de/~compbiol/data/hhsuite/databases/hhsuite_dbs/)) and structure ([PDB](https://www.rcsb.org/))databases to run. (Currently, the scripts for setting up and preprocess all of these databases are still in preparing. Please use the [Webserver](https://cryonet.ai/cryofold) to run CryoFold.)
 
 
 ### 5. Download model weights
