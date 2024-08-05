@@ -1,4 +1,4 @@
-# Copyright (c) CryoNet Team, and its affiliates. All Rights Reserved
+# Copyright (c) CryoFold Team, and its affiliates. All Rights Reserved
 
 """
 Backbone modules.

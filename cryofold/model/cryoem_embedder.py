@@ -1,4 +1,3 @@
-# Copyright (c) CryoFold Team, and its affiliates. All Rights Reserved
 
 import os
 from tkinter.messagebox import NO

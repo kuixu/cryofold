@@ -1,5 +1,3 @@
-# Copyright (c) CryoFold Team, and its affiliates. All Rights Reserved
-
 import os
 import glob
 import importlib as importlib
