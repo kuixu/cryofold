@@ -59,48 +59,21 @@ conda activate cryofold
 conda deactivate (If you want to exit) 
 ```
 
-### 3. Compile CUDA kernels
-Compile CUDA kernels like attention module, fastsoftmax, and layernorm, simply by
-```
-python setup.py install
-```
-
-### 4. Download the sequence and structure databases
-
-CryoFold needs multiple sequence ([PDB seqres](https://www.rcsb.org/), [UniProt](https://www.uniprot.org/uniprot/), [UniRef90](https://www.uniprot.org/help/uniref), [UniClust30](https://uniclust.mmseqs.com/), [MGnify](https://www.ebi.ac.uk/metagenomics/), [BFD](https://bfd.mmseqs.com/), [MetaEuk](https://mmseqs.com/metaeuk), 
-[SMAG](https://smag.microbmalab.cn), and [PDB70](http://wwwuser.gwdg.de/~compbiol/data/hhsuite/databases/hhsuite_dbs/)) and structure ([PDB](https://www.rcsb.org/))databases to run. (Currently, the scripts for setting up and preprocess all of these databases are still in preparing. Please use the [Webserver](https://cryonet.ai/cryofold) to run CryoFold.)
-
-
-### 5. Download model weights
-
-Download the pre-trained model weights and put them in the weights directory, e.g.
-make a directory ``params`` and then download our pretrained model in this directory. <br>
-
-You can also use command line to do this
-```commandline
-mkdir params
-cd params
-wget https://cryofolddb.oss-cn-beijing.aliyuncs.com/weights/cryofold_v1.zip
-unzip cryofold_v1.zip
-```
-
 
 # Usage
 
 <summary>Command Parameters</summary>
 
+
+## Using API
+
 ```commandline
-
-python3 infer.py \
-    --seq FASTA.fasta \
+python3 main.py \
+    --sequence FASTA.fasta \
     --map MAP.mrc \
-    --recycle RECYCLE_TIMES \
-    --gpu_device GPU_DEVICE \ 
-    --checkpoint_path CHECKPOINT_PATH \
-    --output_dir ./ \
-
 
 ```
+
 [FASTA.fasta] is the path of the input sequence file with *.fasta format. [MAP.mrc] is the path of the input cryo-EM/ET map. [RECYCLE_TIMES] specifies the recycle time, and the default value is 8. [CHECKPOINT_PATH] specifies the checkpoint path, and the default value is 'params/cryofold_v1'. [GPU_DEVICE] specifies the GPU device ID.
 
 Example of FASTA.fasta file
@@ -122,15 +95,11 @@ After running the script, the generated predictive model file will be stored in 
 
 
 ### Example Command
-```commandline
 
-python3 infer.py \
-    --seq example/7770.fasta \
+```commandline
+python3 main.py \
+    --sequence example/7770.fasta \
     --map example/7770.mrc \
-    --recycle 8 \
-    --gpu_device 0 \ 
-    --checkpoint_path params/cryofold_v1 \
-    --output_dir ./ \
 
 ```
 
