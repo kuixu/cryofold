@@ -14,7 +14,7 @@ stop_job_url = f'{host}/api/stop_job'
 email = 'cryonet@cryonet.ai'
 random_32_str = ''
 dir_prefix = ''
-query_job_start_time = None
+check_job_start_time = 0
 files = [
   './7770.mrc',
   './7770.fasta'
@@ -125,7 +125,7 @@ def check_job(job_id):
       if stg < 5:
         msg = data['msg']
         progress = data['progress']
-        diff = math.floor(time.time() - query_job_start_time)
+        diff = math.floor(time.time() - check_job_start_time)
         print('\r', end="")
         print(f'status: {msg} {progress}%,  {diff}s', end="")
         print(f"\033[K", end="")
@@ -148,7 +148,7 @@ def check_job(job_id):
       break
 
 def main():
-  global random_32_str, dir_prefix, query_job_start_time
+  global random_32_str, dir_prefix, check_job_start_time
 
   random_32_str = random_string(32)
   dir_prefix = f'jobs/{random_32_str}'
