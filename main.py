@@ -12,11 +12,12 @@ query_job_url  = f'{host}/api/query_job/'
 stop_job_url   = f'{host}/api/stop_job'
 check_md5_url  = f'{host}/api/check_md5'
 
-files = ['', '']
+files = ['', '', '']
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-m', '--map', help="Cryo-EM density map")
 parser.add_argument('-s', '--sequence', help="Sequence")
+parser.add_argument('-t', '--template', help="Custom template")
 
 args = parser.parse_args()
 
@@ -31,6 +32,14 @@ if args.sequence is None:
   sys.exit()
 else:
   files[1] = args.sequence
+
+
+if args.template is None:
+  # print('No sequence file found.')
+  # sys.exit()
+  pass
+else:
+  files[2] = args.template
 
 def get_dir_prefix():
   global dir_prefix, upload_url
@@ -103,6 +112,42 @@ def get_map_seq_md5(mappath, seqpath):
     return total_md5
 
 
+def get_map_seq_tem_md5(mappath, seqpath, tempath):
+    md5_hash1 = hashlib.md5()
+    with open(mappath, 'rb') as file1:
+        while True:
+            data = file1.read(1024 * 10)
+            if not data:
+                break
+            md5_hash1.update(data)
+    md51 = md5_hash1.hexdigest()
+    
+    md5_hash2 = hashlib.md5()
+    with open(seqpath, 'rb') as file2:
+        while True:
+            data = file2.read(1024 * 10)
+            if not data:
+                break
+            md5_hash2.update(data)
+    md52 = md5_hash2.hexdigest()
+
+    if tempath == '':
+      md53 = ''
+    else:
+      md5_hash3 = hashlib.md5()
+      with open(tempath, 'rb') as file3:
+          while True:
+              data = file3.read(1024 * 10)
+              if not data:
+                  break
+              md5_hash3.update(data)
+      md53 = md5_hash3.hexdigest()
+    
+    code = md51 + md52 + md53
+    total_md5 = hashlib.md5(code.encode('utf-8')).hexdigest()
+
+    return total_md5
+
 def upload_file(file_url, file_name):
   def progress_callback(monitor):
     print('\r', end="")
@@ -128,20 +173,26 @@ def upload_file(file_url, file_name):
     print(f'\n{file_name}, failed\n', json.dumps(response.json(), indent=2))
     sys.exit()
 
-def create_job(map_name, map_file, seq_file):
+def create_job(job_name, map_file, seq_file, tem_file=''):
   print(f'Creating job...')
   params = {
-    'mapname': map_name,
+    'mapname': job_name,
     'mapfile': map_file,
     'seqfile': seq_file,
-    'name': map_name,
+    'pdbfile': tem_file,
+    'name': job_name,
     'mode': '41',
   }
   response = requests.post(create_job_url, data=params, verify=False)
-  jdata = response.json()
-  if response.status_code == 200 and jdata['error_code'] == 0:
-    job_id = response.json()['jobid']
-    return job_id
+  print(response)
+  if response.status_code == 200 :
+    jdata = response.json()
+    if jdata['error_code'] == 0:
+      job_id = response.json()['jobid']
+      return job_id
+  elif response.status_code == 500 :
+    print(f'Failed in creating job, server error.\n', )
+    sys.exit()
   else:
     # print(f'Failed in creating job\n', json.dumps(response.json(), indent=2))
     print(f'Failed in creating job\n', jdata['msg'])
@@ -174,8 +225,9 @@ def check_job(job_id):
       print(f'\n{job_id} check job failed\n', json.dumps(data, indent=2))
       break
 
-def check_md5(mappath, seqpath):
-    jmd5 = get_map_seq_md5(mappath, seqpath)
+def check_md5(mappath, seqpath, tempath=''):
+    # jmd5 = get_map_seq_md5(mappath, seqpath, tempath)
+    jmd5 = get_map_seq_tem_md5(mappath, seqpath, tempath)
     print(jmd5)
     response = requests.get(f'{check_md5_url}?md5={jmd5}', verify=False)
     if response.status_code == 200:
@@ -187,26 +239,41 @@ def check_md5(mappath, seqpath):
     else:
         return None
 
+def get_job_path(file_path):
+    file_name = os.path.basename(file_path)
+    file_job = f'{dir_prefix}/{file_name}'
+    return file_name, file_job
+
 def main():
     global check_job_start_time
 
     get_dir_prefix()
 
-    map_file = files[0]
-    seq_file = files[1]
-    map_file_name = os.path.splitext(os.path.basename(map_file))[0]
-    seq_file_name = os.path.splitext(os.path.basename(seq_file))[0]
+    map_file_path = files[0]
+    seq_file_path = files[1]
+    tem_file_path = files[2]
+    map_file_name, map_file_job = get_job_path(map_file_path)
+    seq_file_name, seq_file_job = get_job_path(seq_file_path)
+    job_name = os.path.splitext(map_file_name)[0]
+    if os.path.exists(tem_file_path):
+      tem_file_name, tem_file_job = get_job_path(tem_file_path)
+    else:
+      tem_file_name, tem_file_job = '', ''
+      tem_file_path = ''
+       
 
     print(f'{len(files)} files')
 
-    job_id = check_md5(map_file, seq_file)
+    job_id = check_md5(map_file_path, seq_file_path, tem_file_path)
 
     if job_id is None: 
         print(f"New job: with {map_file_name} and {seq_file_name}")
-        upload_file(map_file, map_file_name)
-        upload_file(seq_file, seq_file_name)
-
-        job_id = create_job(map_name=map_file_name, map_file=f'{dir_prefix}/{map_file_name}', seq_file=f'{dir_prefix}/{seq_file_name}')
+        upload_file(map_file_path, map_file_name)
+        upload_file(seq_file_path, seq_file_name)
+        if os.path.exists(tem_file_path):
+          upload_file(tem_file_path, tem_file_name)
+        job_id = create_job(job_name=job_name, map_file=map_file_job, 
+                            seq_file=seq_file_job, tem_file=tem_file_job)
     else:
         print("Job is in the running.")
     print(f"Visualize and download results: https://cryonet.ai/vis?jobid={job_id}")
