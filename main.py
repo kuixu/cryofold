@@ -221,9 +221,11 @@ def check_job(job_id):
         open(f'./{pdb_name}', 'wb').write(response.content)
         print(f'Complete!')
         print(f'Model saved at {pdb_name}.')
+        return True
     else:
       print(f'\n{job_id} check job failed\n', json.dumps(data, indent=2))
       break
+  return False
 
 def check_md5(mappath, seqpath, tempath=''):
     # jmd5 = get_map_seq_md5(mappath, seqpath, tempath)
@@ -278,6 +280,11 @@ def main():
         print("Job is in the running.")
     print(f"Visualize and download results: https://cryonet.ai/vis?jobid={job_id}")
     check_job_start_time = time.time()
-    check_job(job_id)
+    
+    while True: 
+        done = False
+        try: done = check_job(job_id)
+        except: time.sleep(3)
+        if done: break
   
 main()
