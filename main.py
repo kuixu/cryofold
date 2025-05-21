@@ -15,8 +15,12 @@ check_md5_url  = f'{host}/api/check_md5'
 files = ['', '', '']
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-m', '--map', help="Cryo-EM density map")
-parser.add_argument('-s', '--sequence', help="Sequence")
+parser.add_argument('-m', '--map',        required=True, type=str, help="Cryo-EM density map file path in mrc format")
+parser.add_argument('-s', '--sequence',   required=True, type=str, help="Sequence file path in fasta format")
+parser.add_argument('-r', '--resolution', required=True, type=float, help="Resolution of the density map")
+parser.add_argument('-n', '--num_recycle',  type=int, default=100, help='iteration num for refinement. ')
+parser.add_argument('-o', '--outfile', type=str, default='', help="output file path in pdb format.")
+parser.add_argument('--no_refine',    action='store_true', help='skip refinement stage.')
 parser.add_argument('-t', '--template', help="Custom template")
 
 args = parser.parse_args()
@@ -173,13 +177,16 @@ def upload_file(file_url, file_name):
     print(f'\n{file_name}, failed\n', json.dumps(response.json(), indent=2))
     sys.exit()
 
-def create_job(job_name, map_file, seq_file, tem_file=''):
+def create_job(job_name, map_file, seq_file, resolution, num_recycle, no_refine, tem_file=''):
   print(f'Creating job...')
   params = {
     'mapname': job_name,
     'mapfile': map_file,
     'seqfile': seq_file,
     'pdbfile': tem_file,
+    'resolution': resolution,
+    'num_recycle': num_recycle,
+    'no_refine': no_refine,
     'name': job_name,
     'mode': '41',
   }
@@ -254,6 +261,9 @@ def main():
     map_file_path = files[0]
     seq_file_path = files[1]
     tem_file_path = files[2]
+    resolution=args.resolution
+    num_recycle=args.num_recycle
+    no_refine=args.no_refine, 
     map_file_name, map_file_job = get_job_path(map_file_path)
     seq_file_name, seq_file_job = get_job_path(seq_file_path)
     job_name = os.path.splitext(map_file_name)[0]
@@ -275,7 +285,9 @@ def main():
         if os.path.exists(tem_file_path):
           upload_file(tem_file_path, tem_file_name)
         job_id = create_job(job_name=job_name, map_file=map_file_job, 
-                            seq_file=seq_file_job, tem_file=tem_file_job)
+                            seq_file=seq_file_job, resolution=resolution, 
+                            num_recycle=num_recycle, no_refine=no_refine, 
+                            tem_file=tem_file_job)
     else:
         print("Job is in the running.")
     print(f"Visualize and download results: https://cryonet.ai/vis?jobid={job_id}")
