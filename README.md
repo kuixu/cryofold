@@ -38,7 +38,9 @@ Tutorial of the CryoNet.Fold web server: https://cryonet.ai/fold_docs
 python3 main.py \
     --map MAP.mrc \
     --sequence FASTA.fasta \
-    -r 4.5
+    -r RESOLUTION \
+    -n NUM_RECYCLE \
+    -o OUTFILE \
 
 ```
 
@@ -53,7 +55,12 @@ We would release the installation package upon paper publication. You may check 
 
 ## Input files
 
-[MAP.mrc] is the path of the input cryo-EM/ET map. [FASTA.fasta] is the path of the input sequence file with *.fasta format. [RESOLUTION] specifies the resolution of the density map. [NUM_RECYCLE] specifies the recycle time, and the default value is 200. [OUTFILE] specifies the path of the output file.
+[MAP.mrc] is the file path of the input cryo-EM/ET map. 
+[FASTA.fasta] is the file path of the input sequence file with *.fasta format. 
+[RESOLUTION] specifies the resolution of the density map. 
+[NUM_RECYCLE] sets the number of recycling iterations, with a default value of 100.
+[OUTFILE] specifies the file path for the output file.
+[--no_refine] disables the refinement step.
 
 Example of FASTA.fasta file
 ```
