@@ -1,6 +1,6 @@
-# CryoFold
+# CryoNet.Fold
 <a >
-   <img src="https://img.shields.io/badge/CryoFold-v1.0.0-green">
+   <img src="https://img.shields.io/badge/CryoNet.Fold-v1.0.0-green">
    <img src="https://img.shields.io/badge/platform-Linux">
    <img src="https://img.shields.io/badge/Language-python3-green">
    <img src="https://img.shields.io/badge/licence-MIT-green">
@@ -8,34 +8,37 @@
 
 Protein complex structure determination by structure prediction with cryo-EM density map constraints.  
 
-## CryoFold Architecture
+## CryoNet.Fold Architecture
 
 <p align="center">
-  <img src="misc/framework.png" alt="CryoFold framework" width="70%">
+  <img src="misc/framework.png" alt="CryoNet.Fold framework" width="70%">
 </p>
 
 ## Introduction
 
 <summary>Protein complex structure determination by structure prediction with cryo-EM density map constraints. </summary>
 
-Cryo-electron microscopy (cryo-EM) has become a prominent approach for protein structure determination, especially for large protein complexes. However, obtaining high-resolution cryo-EM density maps remains challenging, particularly for the burgeoning discipline of cryo-electron tomography (cryo-ET). Here, we introduce CryoFold, a deep learning method for protein complex structure determination from cryo-EM density maps based on folding the input protein sequences within the map through multimodal data fusion. On benchmark datasets comprising hundreds of protein complexes with both intermediate- and low-resolution maps (i.e., 4~6 Å), CryoFold generated highly accurate atomic models, vastly outperforming the sequence-alone prediction tool AlphaFold-Multimer. CryoFold also performed well when using high-resolution maps (<4 Å), and notably can construct accurate models from in situ cryo-ET data of very large complexes consisting of hundreds of protein chains and low-resolution maps of 9.9 Å resolution. Finally, we used CryoFold to build models for the EMDB density maps lacking a PDB model, and established the CryoFoldDB database currently comprising 506 new models of protein complexes that are of higher average quality than deposited structures in PDB. Thus, CryoFold is a powerfully enabling technology for expanding the attainable scope of cryo-EM protein structure determination, especially for large protein complexes. 
+Cryo-electron microscopy (cryo-EM) has become a prominent approach for protein structure determination, yet obtaining high-resolution cryo-EM density maps is often challenging. Here, we introduce CryoNet.Fold, a deep learning method that combines computational structural prediction and protein complex structure determination from cryo-EM density maps through multimodal data fusion. CryoNet.Fold generated highly accurate atomic models, both for high-resolution maps (<4 Å) and notably for intermediate- to low-resolution maps (i.e., 4~6 Å), and successfully constructed accurate models from in situ cryo-electron tomography (cryo-ET) data for very large complexes of hundreds of protein chains and low-resolution maps of ~10 Å resolution. We applied CryoNet.Fold to the unmodelled density maps in EMDB, establishing the CryoNet.DB database currently comprising 710 new models of protein complexes, with higher average quality than deposited structures in PDB. Thus, CryoNet.Fold effectively merges the field of cryo-EM and AI-based computational structural biology, expanding the attainable scope of cryo-EM protein structure determination.
 
 
 ## Usage
 
-We provide three ways to run CryoFold:
+We provide three ways to run CryoNet.Fold:
 
 ### 1. Web Server
 
-https://cryonet.ai/cryofold
+https://cryonet.ai/fold
+
+Tutorial of the CryoNet.Fold web server: https://cryonet.ai/fold_docs
 
 
 ### 2. Using API
 
 ```commandline
 python3 main.py \
-    --sequence FASTA.fasta \
     --map MAP.mrc \
+    --sequence FASTA.fasta \
+    -r 4.5
 
 ```
 
@@ -50,7 +53,7 @@ We would release the installation package upon paper publication. You may check 
 
 ## Input files
 
-[FASTA.fasta] is the path of the input sequence file with *.fasta format. [MAP.mrc] is the path of the input cryo-EM/ET map. [RECYCLE_TIMES] specifies the recycle time, and the default value is 8. [CHECKPOINT_PATH] specifies the checkpoint path, and the default value is 'params/cryofold_v1'. [GPU_DEVICE] specifies the GPU device ID.
+[MAP.mrc] is the path of the input cryo-EM/ET map. [FASTA.fasta] is the path of the input sequence file with *.fasta format. [RESOLUTION] specifies the resolution of the density map. [NUM_RECYCLE] specifies the recycle time, and the default value is 200. [OUTFILE] specifies the path of the output file.
 
 Example of FASTA.fasta file
 ```
@@ -73,13 +76,13 @@ After running the script, the generated predictive model file will be stored in 
 
 
 
-## CryoFoldDB
+## CryoNet.DB
 
-https://cryofolddb.ai
+https://cryonet.ai/db
 
 
 <p align="center">
-  <img src="misc/cryofolddb.png" alt="CryoFoldDB database" width="70%">
+  <img src="misc/cryofolddb.png" alt="CryoNet.DB" width="70%">
 </p>
 
 ## Copyright (C)
