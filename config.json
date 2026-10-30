@@ -1,0 +1,19 @@
+{
+    "paths": {
+        "databases": "/data/colabfolddb",
+        "colabfold": {
+            "parallelstages": true,
+            "uniref": "/data/colabfolddb/uniref30_2302_db",
+            "pdb": "/data/colabfolddb/pdb100_230517",
+            "environmental": "/data/colabfolddb/colabfold_envdb_202108_db",
+            "pdb70": "/data/colabfolddb/pdb100",
+            "pdbdivided": "/data/colabfolddb/pdb/divided",
+            "pdbobsolete": "/data/colabfolddb/pdb/obsolete"
+        },
+        "localdb": {
+            "msa_save_path":"/data/localdb/msa_features",
+            "msa_md5_path" :"/data/localdb/msa_seq_md5.fatsa",
+            "temp_dir"     :"/data/localdb/tmp"
+        }
+    }
+}

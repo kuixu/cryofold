@@ -1,0 +1,18 @@
+{
+    "app": "msa-cli",
+    "paths": {
+        "databases": "/data/colabfolddb",
+        "results": "/home/zhangqflab/exp/cryofold/tests/test_multimer",
+        "temporary": "/home/zhangqflab/exp/cryofold/tests/test_multimer/tmp",
+        "colabfold": {
+            "parallelstages": true,
+            "uniref": "/data/colabfolddb/uniref30_2302_db",
+            "pdb": "/data/colabfolddb/pdb100_230517",
+            "environmental": "/data/colabfolddb/colabfold_envdb_202108_db",
+            "pdb70": "/data/colabfolddb/pdb100",
+            "pdbdivided": "/data/colabfolddb/pdb/divided",
+            "pdbobsolete": "/data/colabfolddb/pdb/obsolete"
+        },
+        "mmseqs": "/home/zhangqflab/usr/miniconda3/bin/mmseqs"
+    }
+}

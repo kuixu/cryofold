@@ -49,15 +49,15 @@ python3 main.py \
 We would release the installation package upon paper publication. You may check the following prerequisite:
 
 1. up to 4 TB of disk space to keep sequence and structure databases
-2. a GPU supports CUDA with at least 40GB memory. 
+2. a GPU supports CUDA with at least 40GB memory.
 
 
 
 ## Input files
 
-[MAP.mrc] is the file path of the input cryo-EM/ET map. 
-[FASTA.fasta] is the file path of the input sequence file with *.fasta format. 
-[RESOLUTION] specifies the resolution of the density map. 
+[MAP.mrc] is the file path of the input cryo-EM/ET map.
+[FASTA.fasta] is the file path of the input sequence file with *.fasta format.
+[RESOLUTION] specifies the resolution of the density map.
 [NUM_RECYCLE] sets the number of recycling iterations, with a default value of 100.
 [OUTFILE] specifies the file path for the output file.
 [--no_refine] disables the refinement step.
@@ -79,7 +79,7 @@ For the description line, you could provide the chain id without any other infor
 
 ## Output files
 
-After running the script, the generated predictive model file will be stored in the directory as ``./[MAP]_cryofold.pdb``. 
+After running the script, the generated predictive model file will be stored in the directory as ``./[MAP]_cryofold.pdb``.
 
 
 

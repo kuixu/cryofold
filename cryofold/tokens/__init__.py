@@ -1,0 +1,57 @@
+from dataclasses import dataclass
+from typing import Protocol
+
+from .sasa_tokenizer import SASADiscretizingTokenizer
+from .sequence_tokenizer import SequenceTokenizer
+from .ss_tokenizer import SecondaryStructureTokenizer
+from .structure_tokenizer import StructureTokenizer
+from .tokenizer_base import TokenizerBase
+
+
+class TokenizerCollectionProtocol(Protocol):
+    sequence: SequenceTokenizer
+    structure: StructureTokenizer
+    secondary_structure: SecondaryStructureTokenizer
+    sasa: SASADiscretizingTokenizer
+    # function: InterProQuantizedTokenizer
+    # residue_annotations: ResidueAnnotationsTokenizer
+
+
+@dataclass
+class TokenizerCollection:
+    sequence: SequenceTokenizer
+    structure: StructureTokenizer
+    secondary_structure: SecondaryStructureTokenizer
+    sasa: SASADiscretizingTokenizer
+    # function: InterProQuantizedTokenizer
+    # residue_annotations: ResidueAnnotationsTokenizer
+
+
+def get_model_tokenizers(model=None) -> TokenizerCollection:
+    return TokenizerCollection(
+        sequence=SequenceTokenizer(),
+        structure=StructureTokenizer(),
+        secondary_structure=SecondaryStructureTokenizer(kind="ss8"),
+        sasa=SASADiscretizingTokenizer(),
+        # function=InterProQuantizedTokenizer(),
+        # residue_annotations=ResidueAnnotationsTokenizer(),
+    )
+    # else:
+    #     raise ValueError(f"Unknown model: {model}")
+
+
+def get_invalid_tokenizer_ids(tokenizer: TokenizerBase) -> list[int]:
+    if isinstance(tokenizer, SequenceTokenizer):
+        return [
+            tokenizer.mask_token_id,  # type: ignore
+            tokenizer.pad_token_id,  # type: ignore
+            tokenizer.cls_token_id,  # type: ignore
+            tokenizer.eos_token_id,  # type: ignore
+        ]
+    else:
+        return [
+            tokenizer.mask_token_id,
+            tokenizer.pad_token_id,
+            tokenizer.bos_token_id,
+            tokenizer.eos_token_id,
+        ]
